@@ -7,7 +7,9 @@ defmodule MvCartWeb.Router do
 
   scope "/api", MvCartWeb do
     pipe_through :api
+
     resources "/products", ProductController, except: [:new, :edit]
+    resources "/purchases", PurchaseController, only: [:create]
   end
 
   # Enable LiveDashboard in development

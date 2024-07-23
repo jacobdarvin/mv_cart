@@ -37,6 +37,13 @@ defmodule MvCart.Catalog do
   """
   def get_product!(id), do: Repo.get!(Product, id)
 
+  def get_product(id) do
+    case Repo.get(Product, id) do
+      nil -> {:error, :not_found}
+      product -> {:ok, product}
+    end
+  end
+
   @doc """
   Creates a product.
 
@@ -85,6 +92,15 @@ defmodule MvCart.Catalog do
       {:error, %Ecto.Changeset{}}
 
   """
+
+  def update_product_quantity(%Product{} = product, quantity) do
+    updated_quantity = product.quantity - quantity
+
+    product
+    |> Product.changeset(%{quantity: updated_quantity})
+    |> Repo.update()
+  end
+
   def delete_product(%Product{} = product) do
     Repo.delete(product)
   end
