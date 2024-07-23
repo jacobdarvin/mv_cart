@@ -8,7 +8,7 @@ defmodule MvCartWeb.Router do
   scope "/api", MvCartWeb do
     pipe_through :api
 
-    resources "/products", ProductController, except: [:new, :edit]
+    resources "/products", ProductController, only: [:index, :show]
     resources "/purchases", PurchaseController, only: [:create]
   end
 
