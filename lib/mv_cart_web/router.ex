@@ -10,6 +10,9 @@ defmodule MvCartWeb.Router do
 
     resources "/products", ProductController, only: [:index, :show]
     resources "/purchases", PurchaseController, only: [:create]
+
+    post "/register", UserController, :create
+    post "/login", UserController, :login
   end
 
   # Enable LiveDashboard in development
