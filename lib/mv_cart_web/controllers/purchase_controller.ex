@@ -53,4 +53,10 @@ defmodule MvCartWeb.PurchaseController do
       {:error, "Insufficient balance"}
     end
   end
+
+  def index(conn, _params) do
+    user = Guardian.Plug.current_resource(conn)
+    purchases = Sales.list_user_purchases(user.id)
+    render(conn, :index, purchases: purchases)
+  end
 end

@@ -18,6 +18,7 @@ defmodule MvCartWeb.Router do
     pipe_through :auth
 
     resources "/products", ProductController, only: [:index, :show]
+    get "/purchases", PurchaseController, :index
     post "/purchases", PurchaseController, :create
     get "/balance", UserController, :balance
   end

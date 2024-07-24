@@ -21,6 +21,10 @@ defmodule MvCart.Sales do
     Repo.all(Purchase)
   end
 
+  def list_user_purchases(user_id) do
+    Repo.all(from p in Purchase, where: p.user_id == ^user_id)
+  end
+
   @doc """
   Gets a single purchase.
 
