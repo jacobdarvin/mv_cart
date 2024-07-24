@@ -19,5 +19,6 @@ defmodule MvCartWeb.Router do
 
     resources "/products", ProductController, only: [:index, :show]
     post "/purchases", PurchaseController, :create
+    get "/balance", UserController, :balance
   end
 end

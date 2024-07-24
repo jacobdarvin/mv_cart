@@ -28,4 +28,20 @@ defmodule MvCartWeb.UserController do
         |> json(%{error: "Invalid credentials"})
     end
   end
+
+  def balance(conn, _params) do
+    user = Guardian.Plug.current_resource(conn)
+
+    case user do
+      nil ->
+        conn
+        |> put_status(:unauthorized)
+        |> json(%{error: "User not authenticated"})
+
+      %{} ->
+        conn
+        |> put_status(:ok)
+        |> json(%{balance: user.balance})
+    end
+  end
 end
