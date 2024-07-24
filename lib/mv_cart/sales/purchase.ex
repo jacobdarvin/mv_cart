@@ -6,7 +6,8 @@ defmodule MvCart.Sales.Purchase do
   @foreign_key_type :binary_id
   schema "purchases" do
     field :quantity, :integer
-    field :product_id, :binary_id
+    belongs_to :user, MvCart.Accounts.User, type: :binary_id
+    belongs_to :product, MvCart.Catalog.Product, type: :binary_id
 
     timestamps(type: :utc_datetime)
   end
@@ -14,7 +15,7 @@ defmodule MvCart.Sales.Purchase do
   @doc false
   def changeset(purchase, attrs) do
     purchase
-    |> cast(attrs, [:quantity, :product_id])
-    |> validate_required([:quantity, :product_id])
+    |> cast(attrs, [:quantity, :user_id, :product_id])
+    |> validate_required([:quantity, :user_id, :product_id])
   end
 end

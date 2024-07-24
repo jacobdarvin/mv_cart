@@ -13,6 +13,8 @@ defmodule MvCartWeb.PurchaseController do
   def create(conn, %{"purchase" => purchase_params}) do
     user = Guardian.Plug.current_resource(conn)
 
+    purchase_params = Map.put(purchase_params, "user_id", user.id)
+
     with {:ok, product} <- Catalog.get_product(purchase_params["product_id"]),
          :ok <- validate_quantity(product, purchase_params["quantity"]),
          total_cost <- Decimal.mult(product.price, Decimal.new(purchase_params["quantity"])),

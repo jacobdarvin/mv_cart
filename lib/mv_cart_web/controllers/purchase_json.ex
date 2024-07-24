@@ -18,7 +18,9 @@ defmodule MvCartWeb.PurchaseJSON do
   defp data(%Purchase{} = purchase) do
     %{
       id: purchase.id,
-      quantity: purchase.quantity
+      quantity: purchase.quantity,
+      user_id: purchase.user_id,
+      product_id: purchase.product_id
     }
   end
 end
