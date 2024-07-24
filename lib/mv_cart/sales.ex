@@ -7,6 +7,8 @@ defmodule MvCart.Sales do
   alias MvCart.Repo
 
   alias MvCart.Sales.Purchase
+  alias MvCart.Sales.WalletTransaction
+  alias MvCart.Accounts.Wallet
 
   @doc """
   Returns the list of purchases.
@@ -106,7 +108,21 @@ defmodule MvCart.Sales do
     Purchase.changeset(purchase, attrs)
   end
 
-  alias MvCart.Sales.WalletTransaction
+  def top_up_wallet(user_id, amount) when amount > 0 do
+    Repo.transaction(fn ->
+      wallet = Repo.get_by!(Wallet, user_id: user_id)
+      IO.inspect(wallet, label: "Wallet")
+
+      transaction =
+        %WalletTransaction{}
+        |> WalletTransaction.changeset(%{wallet_id: wallet.id, amount: amount})
+        |> Repo.insert()
+
+      IO.inspect(transaction, label: "Transaction")
+
+      transaction
+    end)
+  end
 
   @doc """
   Returns the list of wallet_transactions.

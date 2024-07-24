@@ -17,6 +17,8 @@ defmodule MvCartWeb.Router do
 
     pipe_through :auth
 
+    post "/wallets/top_up", WalletController, :top_up
+
     get "/products", ProductController, :index
     get "/products/:id", ProductController, :show
 

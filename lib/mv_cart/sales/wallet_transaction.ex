@@ -16,6 +16,6 @@ defmodule MvCart.Sales.WalletTransaction do
   def changeset(wallet_transaction, attrs) do
     wallet_transaction
     |> cast(attrs, [:purchase_id, :wallet_id, :amount])
-    |> validate_required([:purchase_id, :wallet_id, :amount])
+    |> validate_required([:wallet_id, :amount])
   end
 end

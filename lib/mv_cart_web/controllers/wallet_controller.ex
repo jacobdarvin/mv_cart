@@ -3,6 +3,8 @@ defmodule MvCartWeb.WalletController do
 
   alias MvCart.Accounts
   alias MvCart.Accounts.Wallet
+  alias MvCart.Sales
+  alias MvCart.Guardian
 
   action_fallback MvCartWeb.FallbackController
 
@@ -38,6 +40,32 @@ defmodule MvCartWeb.WalletController do
 
     with {:ok, %Wallet{}} <- Accounts.delete_wallet(wallet) do
       send_resp(conn, :no_content, "")
+    end
+  end
+
+  def top_up(conn, %{"wallet" => %{"amount" => amount}}) do
+    user = Guardian.Plug.current_resource(conn)
+
+    case user do
+      nil ->
+        conn
+        |> put_status(:unauthorized)
+        |> json(%{error: "User not authenticated"})
+
+      %{} ->
+        amount = Decimal.new(amount)
+
+        case Sales.top_up_wallet(user.id, amount) do
+          {:ok, _transaction} ->
+            conn
+            |> put_status(:created)
+            |> json(%{message: "Top-up successful"})
+
+          {:error, reason} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> json(%{error: reason})
+        end
     end
   end
 end
