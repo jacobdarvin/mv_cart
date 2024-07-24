@@ -22,6 +22,10 @@ config :mv_cart, MvCartWeb.Endpoint,
   pubsub_server: MvCart.PubSub,
   live_view: [signing_salt: "x6ZNVQBH"]
 
+config :mv_cart, MvCart.Guardian,
+  issuer: "mv_cart",
+  secret_key: "u6601yEDXGS0Ticiu+3tAbMF4nS/rXNWuk3YyBheWPsVv9KplrswMvNFbCyXrqd0"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

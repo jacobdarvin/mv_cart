@@ -3,34 +3,29 @@ defmodule MvCartWeb.UserController do
 
   alias MvCart.Accounts
   alias MvCart.Accounts.User
+  alias MvCart.Guardian
 
   action_fallback MvCartWeb.FallbackController
 
   def create(conn, %{"user" => user_params}) do
-    with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
+    with {:ok, %User{} = user} <- Accounts.create_user(user_params),
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
       |> put_status(:created)
-      |> render(:show, user: user)
+      |> json(%{user: %{id: user.id, email: user.email}, token: token})
     end
   end
 
   def login(conn, %{"user" => %{"email" => email, "password" => password}}) do
-    case Accounts.get_user_by_email(email) do
-      nil ->
+    case Accounts.authenticate_user(email, password) do
+      {:ok, user} ->
+        {:ok, token, _claims} = Guardian.encode_and_sign(user)
+        json(conn, %{user: %{id: user.id, email: user.email}, token: token})
+
+      {:error, _reason} ->
         conn
         |> put_status(:unauthorized)
-        |> json(%{error: "Invalid email or password"})
-
-      %User{password_hash: password_hash} = user ->
-        if Bcrypt.verify_pass(password, password_hash) do
-          conn
-          |> put_status(:ok)
-          |> render(:show, user: user)
-        else
-          conn
-          |> put_status(:unauthorized)
-          |> json(%{error: "Invalid email or password"})
-        end
+        |> json(%{error: "Invalid credentials"})
     end
   end
 end
