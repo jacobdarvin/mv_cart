@@ -68,4 +68,28 @@ defmodule MvCartWeb.WalletController do
         end
     end
   end
+
+  def calculate_balance(conn, _params) do
+    user = Guardian.Plug.current_resource(conn)
+
+    case user do
+      nil ->
+        conn
+        |> put_status(:unauthorized)
+        |> json(%{error: "User not authenticated"})
+
+      %{} ->
+        case Sales.calculate_balance(user.id) do
+          {:ok, balance} ->
+            conn
+            |> put_status(:ok)
+            |> json(%{balance: balance})
+
+          {:error, reason} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> json(%{error: reason})
+        end
+    end
+  end
 end

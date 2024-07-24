@@ -124,6 +124,25 @@ defmodule MvCart.Sales do
     end)
   end
 
+  def calculate_balance(user_id) do
+    wallet = Repo.get_by(Wallet, user_id: user_id)
+
+    case wallet do
+      nil ->
+        {:error, :not_found}
+
+      _ ->
+        balance =
+          Repo.aggregate(
+            from(t in WalletTransaction, where: t.wallet_id == ^wallet.id),
+            :sum,
+            :amount
+          ) || Decimal.new("0.00")
+
+        {:ok, balance}
+    end
+  end
+
   @doc """
   Returns the list of wallet_transactions.
 
