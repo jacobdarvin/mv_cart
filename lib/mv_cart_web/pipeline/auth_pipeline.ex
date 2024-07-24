@@ -4,7 +4,7 @@ defmodule MvCartWeb.Pipeline.AuthPipeline do
     module: MvCart.Guardian,
     error_handler: MvCartWeb.AuthErrorHandler
 
-  plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+  plug Guardian.Plug.VerifyHeader, scheme: "Bearer"
   plug Guardian.Plug.EnsureAuthenticated
   plug Guardian.Plug.LoadResource
 end
