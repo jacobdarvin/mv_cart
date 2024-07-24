@@ -29,20 +29,6 @@ defmodule MvCart.Accounts do
     end
   end
 
-  def update_user_balance(%User{id: _id, balance: balance} = user, total_cost) do
-    new_balance = Decimal.sub(balance, total_cost)
-
-    user
-    |> User.changeset(%{balance: new_balance})
-    |> Repo.update()
-  end
-
-  def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
-  end
-
   # Create user for wallet feature
   def create_user_with_wallet(attrs \\ %{}) do
     Repo.transaction(fn ->

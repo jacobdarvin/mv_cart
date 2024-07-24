@@ -26,6 +26,5 @@ defmodule MvCartWeb.Router do
     get "/purchases", PurchaseController, :index
     post "/purchases", PurchaseController, :create
 
-    get "/balance", UserController, :balance
   end
 end
