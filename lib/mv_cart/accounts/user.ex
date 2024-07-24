@@ -10,6 +10,7 @@ defmodule MvCart.Accounts.User do
     field :password_hash, :string
     field :balance, :decimal, default: 500.0
 
+    has_one :wallet, MvCart.Accounts.Wallet
     timestamps(type: :utc_datetime)
   end
 

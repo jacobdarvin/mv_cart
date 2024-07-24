@@ -2,6 +2,7 @@ defmodule MvCart.Guardian do
   use Guardian, otp_app: :mv_cart
 
   alias MvCart.Accounts
+  alias MvCart.Repo
 
   def subject_for_token(user, _claims) do
     {:ok, to_string(user.id)}
@@ -9,9 +10,11 @@ defmodule MvCart.Guardian do
 
   def resource_from_claims(claims) do
     id = claims["sub"]
-    user = Accounts.get_user!(id)
+
+    user =
+      Accounts.get_user!(id)
+      |> Repo.preload(:wallet)
+
     {:ok, user}
-  rescue
-    _ -> {:error, :resource_not_found}
   end
 end
