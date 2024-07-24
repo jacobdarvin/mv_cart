@@ -21,7 +21,8 @@ defmodule MvCartWeb.ProductJSON do
       name: product.name,
       description: product.description,
       quantity: product.quantity,
-      price: product.price
+      price: product.price,
+      image: product.image
     }
   end
 end

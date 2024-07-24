@@ -9,6 +9,7 @@ defmodule MvCart.Catalog.Product do
     field :description, :string
     field :quantity, :integer
     field :price, :decimal
+    field :image, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -16,7 +17,7 @@ defmodule MvCart.Catalog.Product do
   @doc false
   def changeset(product, attrs) do
     product
-    |> cast(attrs, [:name, :description, :quantity, :price])
-    |> validate_required([:name, :description, :quantity, :price])
+    |> cast(attrs, [:name, :description, :quantity, :price, :image])
+    |> validate_required([:name, :description, :quantity, :price, :image])
   end
 end
