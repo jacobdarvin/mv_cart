@@ -46,7 +46,10 @@ defmodule MvCartWeb.PurchaseControllerTest do
   describe "update purchase" do
     setup [:create_purchase]
 
-    test "renders purchase when data is valid", %{conn: conn, purchase: %Purchase{id: id} = purchase} do
+    test "renders purchase when data is valid", %{
+      conn: conn,
+      purchase: %Purchase{id: id} = purchase
+    } do
       conn = put(conn, ~p"/api/purchases/#{purchase}", purchase: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 

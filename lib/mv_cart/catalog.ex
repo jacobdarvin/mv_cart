@@ -8,6 +8,12 @@ defmodule MvCart.Catalog do
 
   alias MvCart.Catalog.Product
 
+  def create_product(params) do
+    %Product{}
+    |> Product.changeset(params)
+    |> Repo.insert()
+  end
+
   def list_products do
     Repo.all(Product)
   end

@@ -7,7 +7,7 @@ defmodule MvCart.AccountsFixtures do
   @doc """
   Generate a unique user email.
   """
-  def unique_user_email, do: "some email#{System.unique_integer([:positive])}"
+  def unique_user_email, do: "some_email_#{System.unique_integer([:positive])}@gmail.com"
 
   @doc """
   Generate a user.
@@ -16,10 +16,9 @@ defmodule MvCart.AccountsFixtures do
     {:ok, user} =
       attrs
       |> Enum.into(%{
-        email: unique_user_email(),
-        password_hash: "some password_hash"
+        email: unique_user_email()
       })
-      |> MvCart.Accounts.create_user()
+      |> MvCart.Accounts.create_user_with_wallet()
 
     user
   end

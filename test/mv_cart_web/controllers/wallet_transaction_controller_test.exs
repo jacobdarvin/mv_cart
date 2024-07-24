@@ -52,8 +52,15 @@ defmodule MvCartWeb.WalletTransactionControllerTest do
   describe "update wallet_transaction" do
     setup [:create_wallet_transaction]
 
-    test "renders wallet_transaction when data is valid", %{conn: conn, wallet_transaction: %WalletTransaction{id: id} = wallet_transaction} do
-      conn = put(conn, ~p"/api/wallet_transactions/#{wallet_transaction}", wallet_transaction: @update_attrs)
+    test "renders wallet_transaction when data is valid", %{
+      conn: conn,
+      wallet_transaction: %WalletTransaction{id: id} = wallet_transaction
+    } do
+      conn =
+        put(conn, ~p"/api/wallet_transactions/#{wallet_transaction}",
+          wallet_transaction: @update_attrs
+        )
+
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, ~p"/api/wallet_transactions/#{id}")
@@ -66,8 +73,15 @@ defmodule MvCartWeb.WalletTransactionControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
-    test "renders errors when data is invalid", %{conn: conn, wallet_transaction: wallet_transaction} do
-      conn = put(conn, ~p"/api/wallet_transactions/#{wallet_transaction}", wallet_transaction: @invalid_attrs)
+    test "renders errors when data is invalid", %{
+      conn: conn,
+      wallet_transaction: wallet_transaction
+    } do
+      conn =
+        put(conn, ~p"/api/wallet_transactions/#{wallet_transaction}",
+          wallet_transaction: @invalid_attrs
+        )
+
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -75,7 +89,10 @@ defmodule MvCartWeb.WalletTransactionControllerTest do
   describe "delete wallet_transaction" do
     setup [:create_wallet_transaction]
 
-    test "deletes chosen wallet_transaction", %{conn: conn, wallet_transaction: wallet_transaction} do
+    test "deletes chosen wallet_transaction", %{
+      conn: conn,
+      wallet_transaction: wallet_transaction
+    } do
       conn = delete(conn, ~p"/api/wallet_transactions/#{wallet_transaction}")
       assert response(conn, 204)
 

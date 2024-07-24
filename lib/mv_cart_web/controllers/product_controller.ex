@@ -11,6 +11,7 @@ defmodule MvCartWeb.ProductController do
   end
 
   def show(conn, %{"id" => id}) do
+    # Use catalog fixture for unit test
     product = Catalog.get_product!(id)
     render(conn, :show, product: product)
   end
