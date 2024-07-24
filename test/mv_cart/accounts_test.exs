@@ -3,7 +3,6 @@ defmodule MvCart.AccountsTest do
 
   alias MvCart.Accounts
   alias MvCart.Accounts.User
-  alias MvCart.Accounts.Wallet
 
   import MvCart.AccountsFixtures
 
@@ -40,6 +39,14 @@ defmodule MvCart.AccountsTest do
       email = params.email
 
       assert {:ok, %User{email: ^email}} = Accounts.create_user_with_wallet(params)
+    end
+
+    test "returns error if wallet is invalid" do
+      params = %{"email" => "jacob@gmail.com", "password" => "12"}
+
+      assert_raise Ecto.InvalidChangesetError, fn ->
+        Accounts.create_user_with_wallet(params)
+      end
     end
   end
 end
