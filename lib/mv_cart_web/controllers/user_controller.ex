@@ -8,7 +8,7 @@ defmodule MvCartWeb.UserController do
   action_fallback MvCartWeb.FallbackController
 
   def create(conn, %{"user" => user_params}) do
-    with {:ok, %User{} = user} <- Accounts.create_user(user_params),
+    with {:ok, %User{} = user} <- Accounts.create_user_with_wallet(user_params),
          {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
       |> put_status(:created)

@@ -7,6 +7,7 @@ defmodule MvCart.Accounts do
   alias MvCart.Repo
 
   alias MvCart.Accounts.User
+  alias MvCart.Accounts.Wallet
 
   def get_user!(id), do: Repo.get!(User, id)
 
@@ -42,7 +43,26 @@ defmodule MvCart.Accounts do
     |> Repo.insert()
   end
 
-  alias MvCart.Accounts.Wallet
+  # Create user for wallet feature
+  def create_user_with_wallet(attrs \\ %{}) do
+    Repo.transaction(fn ->
+      user = create_user!(attrs)
+      create_wallet!(user.id)
+      user
+    end)
+  end
+
+  defp create_user!(attrs) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert!()
+  end
+
+  defp create_wallet!(user_id) do
+    %Wallet{}
+    |> Wallet.changeset(%{user_id: user_id})
+    |> Repo.insert!()
+  end
 
   @doc """
   Returns the list of wallets.
