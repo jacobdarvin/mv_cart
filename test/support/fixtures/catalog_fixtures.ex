@@ -1,12 +1,6 @@
 defmodule MvCart.CatalogFixtures do
-  @moduledoc """
-  This module defines test helpers for creating
-  entities via the `MvCart.Catalog` context.
-  """
+  alias MvCart.Catalog
 
-  @doc """
-  Generate a product.
-  """
   def product_fixture(attrs \\ %{}) do
     {:ok, product} =
       attrs
@@ -14,9 +8,10 @@ defmodule MvCart.CatalogFixtures do
         description: "some description",
         name: "some name",
         price: "120.5",
-        quantity: 42
+        quantity: 42,
+        image: "some_image.jpg"
       })
-      |> MvCart.Catalog.create_product()
+      |> Catalog.create_product()
 
     product
   end
