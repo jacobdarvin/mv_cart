@@ -19,8 +19,7 @@ defmodule MvCart.SalesFixtures do
       |> Enum.into(%{
         user_id: user.id,
         product_id: product.id,
-        quantity: 42,
-        total_price: Decimal.new("100.00")
+        quantity: 42
       })
       |> MvCart.Sales.create_purchase()
 
@@ -31,11 +30,13 @@ defmodule MvCart.SalesFixtures do
   Generate a wallet_transaction.
   """
   def wallet_transaction_fixture(attrs \\ %{}) do
+    purchase = purchase_fixture() # Ensure a valid purchase is created
+
     {:ok, wallet_transaction} =
       attrs
       |> Enum.into(%{
         amount: "120.5",
-        purchase_id: Ecto.UUID.generate(),
+        purchase_id: purchase.id,
         wallet_id: Ecto.UUID.generate()
       })
       |> MvCart.Sales.create_wallet_transaction()
