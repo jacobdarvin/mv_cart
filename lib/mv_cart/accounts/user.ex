@@ -8,8 +8,6 @@ defmodule MvCart.Accounts.User do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :password_hash, :string
-    field :balance, :decimal, default: 500.0
-
     has_one :wallet, MvCart.Accounts.Wallet
     timestamps(type: :utc_datetime)
   end
@@ -17,8 +15,8 @@ defmodule MvCart.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :balance])
-    |> validate_required([:email, :balance])
+    |> cast(attrs, [:email, :password])
+    |> validate_required([:email])
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 6)
     |> maybe_hash_password()
