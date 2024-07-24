@@ -19,5 +19,6 @@ defmodule MvCart.Catalog.Product do
     product
     |> cast(attrs, [:name, :description, :quantity, :price, :image])
     |> validate_required([:name, :description, :quantity, :price, :image])
+    |> validate_number(:quantity, greater_than_or_equal_to: 0)
   end
 end

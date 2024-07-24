@@ -54,4 +54,46 @@ defmodule MvCart.CatalogTest do
       assert products == []
     end
   end
+
+  describe "get_product!/1" do
+    test "returns the product with the given id" do
+      product = product_fixture(%{name: "Product 1"})
+      fetched_product = Catalog.get_product!(product.id)
+      assert fetched_product.id == product.id
+    end
+
+    test "raises an error if the product does not exist" do
+      non_existent_id = Ecto.UUID.generate()
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Catalog.get_product!(non_existent_id)
+      end
+    end
+  end
+
+  describe "get_product/1" do
+    test "returns {:ok, product} if the product exists" do
+      product = product_fixture(%{name: "Product 1"})
+      assert {:ok, fetched_product} = Catalog.get_product(product.id)
+      assert fetched_product.id == product.id
+    end
+
+    test "returns {:error, :not_found} if the product does not exist" do
+      non_existent_id = Ecto.UUID.generate()
+      assert {:error, :not_found} = Catalog.get_product(non_existent_id)
+    end
+  end
+
+  describe "update_product_quantity/2" do
+    test "updates the product quantity" do
+      product = product_fixture(%{quantity: 10})
+      assert {:ok, %Product{} = updated_product} = Catalog.update_product_quantity(product, 3)
+      assert updated_product.quantity == 7
+    end
+
+    test "returns an error if the product quantity update fails" do
+      product = product_fixture(%{quantity: 10})
+      assert {:error, _changeset} = Catalog.update_product_quantity(product, 20)
+    end
+  end
 end
