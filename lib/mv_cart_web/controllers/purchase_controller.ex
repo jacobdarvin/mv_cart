@@ -1,7 +1,6 @@
 defmodule MvCartWeb.PurchaseController do
   use MvCartWeb, :controller
 
-  alias MvCart.Repo
   alias MvCart.Sales
   alias MvCart.Catalog
   alias MvCart.Sales.Purchase
@@ -11,10 +10,7 @@ defmodule MvCartWeb.PurchaseController do
   action_fallback MvCartWeb.FallbackController
 
   def create(conn, %{"purchase" => purchase_params}) do
-    user =
-      Guardian.Plug.current_resource(conn)
-      |> Repo.preload(:wallet)
-
+    user = Guardian.Plug.current_resource(conn)
     purchase_params = Map.put(purchase_params, "user_id", user.id)
 
     with {:ok, product} <- Catalog.get_product(purchase_params["product_id"]),

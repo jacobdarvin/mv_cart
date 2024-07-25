@@ -5,7 +5,8 @@ defmodule MvCart.Accounts.Wallet do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "wallets" do
-    field :user_id, Ecto.UUID
+    belongs_to :user, MvCart.Accounts.User, type: :binary_id
+    has_many :wallet_transactions, MvCart.Sales.WalletTransaction
 
     timestamps(type: :utc_datetime)
   end

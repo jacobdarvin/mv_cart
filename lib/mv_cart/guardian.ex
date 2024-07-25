@@ -5,7 +5,7 @@ defmodule MvCart.Guardian do
   alias MvCart.Repo
 
   def subject_for_token(user, _claims) do
-    {:ok, to_string(user.id)}
+    {:ok, user.id}
   end
 
   def resource_from_claims(claims) do
