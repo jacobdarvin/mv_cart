@@ -1,87 +1,98 @@
 defmodule MvCartWeb.PurchaseControllerTest do
   use MvCartWeb.ConnCase
 
+  import MvCart.AccountsFixtures
+  import MvCart.CatalogFixtures
   import MvCart.SalesFixtures
+  import Ecto.Query, only: [from: 2]
 
-  alias MvCart.Sales.Purchase
-
-  @create_attrs %{
-    quantity: 42
-  }
-  @update_attrs %{
-    quantity: 43
-  }
-  @invalid_attrs %{quantity: nil}
+  alias MvCart.Guardian
+  alias MvCart.Repo
+  alias MvCart.Catalog.Product
+  alias MvCart.Sales.WalletTransaction
+  alias MvCart.Accounts.User
+  alias Decimal
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
   describe "index" do
-    test "lists all purchases", %{conn: conn} do
+    setup :setup_user
+
+    test "returns unauthenticated", %{conn: conn} do
       conn = get(conn, ~p"/api/purchases")
+      assert json_response(conn, 401)
+    end
+
+    test "lists all purchases for authenticated user", %{conn: conn, token: token} do
+      conn = conn |> put_req_header("authorization", "Bearer #{token}") |> get(~p"/api/purchases")
       assert json_response(conn, 200)["data"] == []
     end
   end
 
-  describe "create purchase" do
-    test "renders purchase when data is valid", %{conn: conn} do
-      conn = post(conn, ~p"/api/purchases", purchase: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+  describe "create" do
+    setup :setup_user_and_product
 
-      conn = get(conn, ~p"/api/purchases/#{id}")
-
-      assert %{
-               "id" => ^id,
-               "quantity" => 42
-             } = json_response(conn, 200)["data"]
+    test "returns unauthenticated", %{conn: conn} do
+      conn = post(conn, ~p"/api/purchases", purchase: %{})
+      assert json_response(conn, 401)
     end
 
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, ~p"/api/purchases", purchase: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
-  describe "update purchase" do
-    setup [:create_purchase]
-
-    test "renders purchase when data is valid", %{
+    test "returns error when insufficient balance", %{
       conn: conn,
-      purchase: %Purchase{id: id} = purchase
+      token: token,
+      product: product,
+      user: user
     } do
-      conn = put(conn, ~p"/api/purchases/#{purchase}", purchase: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+      # Reduce the user's wallet transactions to reflect an insufficient balance
+      Repo.delete_all(from(t in WalletTransaction, where: t.wallet_id == ^user.wallet.id))
 
-      conn = get(conn, ~p"/api/purchases/#{id}")
+      purchase_params = %{
+        "product_id" => product.id,
+        "quantity" => 1
+      }
 
-      assert %{
-               "id" => ^id,
-               "quantity" => 43
-             } = json_response(conn, 200)["data"]
+      conn =
+        conn
+        |> put_req_header("authorization", "Bearer #{token}")
+        |> post(~p"/api/purchases", purchase: purchase_params)
+
+      assert json_response(conn, 422)["error"] == "Insufficient balance"
     end
 
-    test "renders errors when data is invalid", %{conn: conn, purchase: purchase} do
-      conn = put(conn, ~p"/api/purchases/#{purchase}", purchase: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
+    test "returns error when quantity is invalid", %{conn: conn, token: token, product: product} do
+      purchase_params = %{
+        "product_id" => product.id,
+        "quantity" => product.quantity + 1
+      }
+
+      conn =
+        conn
+        |> put_req_header("authorization", "Bearer #{token}")
+        |> post(~p"/api/purchases", purchase: purchase_params)
+
+      assert json_response(conn, 422)["error"] == "Invalid quantity"
     end
   end
 
-  describe "delete purchase" do
-    setup [:create_purchase]
-
-    test "deletes chosen purchase", %{conn: conn, purchase: purchase} do
-      conn = delete(conn, ~p"/api/purchases/#{purchase}")
-      assert response(conn, 204)
-
-      assert_error_sent 404, fn ->
-        get(conn, ~p"/api/purchases/#{purchase}")
-      end
-    end
+  defp setup_user(_context) do
+    user = user_fixture()
+    {:ok, token, _claims} = Guardian.encode_and_sign(user)
+    %{token: token}
   end
 
-  defp create_purchase(_) do
-    purchase = purchase_fixture()
-    %{purchase: purchase}
+  defp setup_user_and_product(_context) do
+    user = user_fixture() |> Repo.preload(:wallet)
+    product = product_fixture()
+    {:ok, token, _claims} = Guardian.encode_and_sign(user)
+
+    # Create wallet transactions to ensure sufficient balance
+    Repo.insert!(%WalletTransaction{
+      wallet_id: user.wallet.id,
+      amount: Decimal.new("1000.0")
+    })
+
+    %{token: token, product: product, user: user}
   end
 end
