@@ -2,7 +2,22 @@
 
 This is the Phoenix server for the https://github.com/jacobdarvin/mv-cart front end.
 
-To begin, first seed the database
+To begin you must have Phoenix and Elixir installed.
+
+### Get Dependencies
+
+```sh
+mix deps.get
+```
+
+### Create Database and Migrate Data
+
+```sh
+mix ecto.create
+mix ecto.migrate
+```
+
+### Seed Database with Sample Data
 
 ```sh
 mix run priv/repo/seeds.exs
@@ -42,12 +57,14 @@ Catalog.create_product(%{
 })
 ```
 
-Then run 
+## Run server
 
 ```sh
 mix phx.server
 ```
 
-This will run a live server on localhost:4000.
+This will run a phoenix server on http://localhost:4000
+
+### Run the frontend
 
 After this run the front end: https://github.com/jacobdarvin/mv-cart
