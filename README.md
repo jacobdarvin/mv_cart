@@ -2,6 +2,8 @@
 
 This is the Phoenix server for the https://github.com/jacobdarvin/mv-cart front end.
 
+## Project Setup
+
 To begin you must have Phoenix and Elixir installed.
 
 ### Get Dependencies
@@ -67,4 +69,5 @@ This will run a phoenix server on http://localhost:4000
 
 ### Run the frontend
 
-After this run the front end: https://github.com/jacobdarvin/mv-cart
+After this run the frontend: https://github.com/jacobdarvin/mv-cart
+
