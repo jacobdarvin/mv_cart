@@ -1,4 +1,4 @@
-# MvCart
+# MvCart (COP'D)
 
 This is the Phoenix server for the https://github.com/jacobdarvin/mv-cart front end.
 
