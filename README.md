@@ -65,9 +65,15 @@ Catalog.create_product(%{
 mix phx.server
 ```
 
+## 🧰 Unit tests
+
+```sh
+mix test
+```
+
 This will run a phoenix server on http://localhost:4000
 
 ## 🏞️ Run the frontend
 
-After this run the frontend: https://github.com/jacobdarvin/mv-cart
+Please refer to https://github.com/jacobdarvin/mv-cart for instructions on running the frontend (Vue 3)
 
