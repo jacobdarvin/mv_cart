@@ -30,7 +30,8 @@ defmodule MvCart.SalesFixtures do
   Generate a wallet_transaction.
   """
   def wallet_transaction_fixture(attrs \\ %{}) do
-    purchase = purchase_fixture() # Ensure a valid purchase is created
+    # Ensure a valid purchase is created
+    purchase = purchase_fixture()
 
     {:ok, wallet_transaction} =
       attrs

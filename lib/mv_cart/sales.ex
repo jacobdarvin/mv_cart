@@ -23,7 +23,6 @@ defmodule MvCart.Sales do
   def top_up_wallet(user_id, amount) when amount > 0 do
     Repo.transaction(fn ->
       wallet = Repo.get_by!(Wallet, user_id: user_id)
-      IO.inspect(wallet, label: "Wallet")
 
       %WalletTransaction{}
       |> WalletTransaction.changeset(%{wallet_id: wallet.id, amount: amount})
