@@ -65,6 +65,12 @@ Catalog.create_product(%{
 mix phx.server
 ```
 
+## 🧰 Unit tests
+
+```sh
+mix test
+```
+
 This will run a phoenix server on http://localhost:4000
 
 ## 🏞️ Run the frontend
