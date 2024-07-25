@@ -1,8 +1,8 @@
-# MvCart (COP'D)
+# 💽 mv_cart
 
 This is the Phoenix server for the https://github.com/jacobdarvin/mv-cart front end.
 
-## Project Setup
+## 🏎️ Project Setup
 
 To begin you must have Phoenix and Elixir installed.
 
@@ -59,7 +59,7 @@ Catalog.create_product(%{
 })
 ```
 
-## Run server
+## 💻 Run server
 
 ```sh
 mix phx.server
@@ -67,7 +67,7 @@ mix phx.server
 
 This will run a phoenix server on http://localhost:4000
 
-### Run the frontend
+## 🏞️ Run the frontend
 
 After this run the frontend: https://github.com/jacobdarvin/mv-cart
 
