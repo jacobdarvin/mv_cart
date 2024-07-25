@@ -1,25 +1,9 @@
 defmodule MvCartWeb.ProductControllerTest do
   use MvCartWeb.ConnCase
 
-  import MvCart.CatalogFixtures
   import MvCart.AccountsFixtures
 
-  alias MvCart.Catalog.Product
   alias MvCart.Guardian
-
-  @create_attrs %{
-    name: "some name",
-    description: "some description",
-    quantity: 42,
-    price: "120.5"
-  }
-  @update_attrs %{
-    name: "some updated name",
-    description: "some updated description",
-    quantity: 43,
-    price: "456.7"
-  }
-  @invalid_attrs %{name: nil, description: nil, quantity: nil, price: nil}
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}

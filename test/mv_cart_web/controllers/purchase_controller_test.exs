@@ -3,14 +3,11 @@ defmodule MvCartWeb.PurchaseControllerTest do
 
   import MvCart.AccountsFixtures
   import MvCart.CatalogFixtures
-  import MvCart.SalesFixtures
   import Ecto.Query, only: [from: 2]
 
   alias MvCart.Guardian
   alias MvCart.Repo
-  alias MvCart.Catalog.Product
   alias MvCart.Sales.WalletTransaction
-  alias MvCart.Accounts.User
   alias Decimal
 
   setup %{conn: conn} do

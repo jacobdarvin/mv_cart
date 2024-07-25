@@ -60,7 +60,7 @@ defmodule MvCart.SalesTest do
   describe "top_up_wallet/2" do
     test "tops up the wallet with a valid amount" do
       user = user_fixture()
-      wallet = Wallet |> Repo.get_by!(user_id: user.id)
+      _wallet = Wallet |> Repo.get_by!(user_id: user.id)
 
       assert {:ok, _} = Sales.top_up_wallet(user.id, Decimal.new("50.00"))
       assert {:ok, balance} = Sales.calculate_balance(user.id)
